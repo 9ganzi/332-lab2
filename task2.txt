@@ -1,0 +1,49 @@
+output:
+
+––––––––––––––––––in process P––––––––––––––––––
+a = 10
+b = 30
+pid = 5618
+––––––––––––––––––in process Q––––––––––––––––––
+a = 35
+b = 25
+pid = 5619
+––––––––––––––––––in process Q––––––––––––––––––
+a = 35
+b = 40
+pid = 5619
+––––––––––––––––––in process R––––––––––––––––––
+a = 895
+b = 25
+pid = 5620
+
+
+interpretation(line by line):
+
+    int a = 10;
+    int b = 25;
+    int fq = 0;
+    int fr = 0;
+    fq = fork(); // fork process Q
+    if (fq == 0) // we are in process Q, since fq is 0
+    {
+        a = a + b; // a = 10 + 25 = 35, b = 25, pid = pid of Q
+        print values of a, b, pid of process Q
+        fflush(0); // to avoid the printf above appearing in the output buffer of the child
+        fr = fork(); // fork process R
+        if (fr != 0) // we are in process Q, since fr is not 0
+        {
+            b = b + 15; // a = 35, b = 25 + 15 = 40, pid = pid of Q
+            print values of a, b, pid of process Q
+        }
+        else // we are in process R, since fr is 0
+        {
+            a = (a * b) + 20; // a = (35 * 25) + 20 = 895, b = 25, pid = pid of R
+            print values of a, b, pid of process R
+        }
+    }
+    else // we are in process P
+    {
+        b = a + b - 5; // a = 10, b = 10 + 25 - 5 = 30, pid = pid of P
+        print values of a, b, pid of process P
+    }
